@@ -170,10 +170,10 @@ bool alsaPlayer::play(const std::string &filename)
 
     // Print info about audio file.
     std::cout << "Playing: " << filename << "\n";
-    if (title != nullptr) std::cout << "Title: " << sf_get_string(audioFile, 0x01) << "\n";
-    if (trackno != nullptr) std::cout << "Track: " << sf_get_string(audioFile, 0x09) << "\n";
-    if (artist != nullptr) std::cout << "Artist: " << sf_get_string(audioFile, 0x04) << "\n";
-    if (album != nullptr) std::cout << "Album: " << sf_get_string(audioFile, 0x07) << "\n";
+    if (title != nullptr) std::cout << "Title: " << title << "\n";
+    if (trackno != nullptr) std::cout << "Track: " << trackno << "\n";
+    if (artist != nullptr) std::cout << "Artist: " << artist << "\n";
+    if (album != nullptr) std::cout << "Album: " << album << "\n";
     std::cout << "Channels: " << fileInfo.channels << "\n";
     std::cout << "Format: " << formatInfo.name << "\n";
     std::cout << "Sample Rate: " << fileInfo.samplerate << " hz\n";
