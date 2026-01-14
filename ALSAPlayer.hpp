@@ -1,9 +1,10 @@
+#include "AudioPlayer.hpp"
 #include <alsa/asoundlib.h>
 #include <sndfile.h>
 #include <vector>
 #include <string>
 
-class alsaPlayer
+class ALSAPlayer : public AudioPlayer
 {
     private:
         snd_pcm_t *audioDevice;
@@ -15,7 +16,7 @@ class alsaPlayer
 
         bool initAudioDevice();
     public:
-        alsaPlayer();
-        ~alsaPlayer();
-        bool play(const std::string &filename);
+        ALSAPlayer();
+        ~ALSAPlayer() override;
+        bool play(const std::string &filename) override;
 };

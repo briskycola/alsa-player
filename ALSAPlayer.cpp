@@ -1,6 +1,7 @@
-#include "alsa-player.hpp"
+#include "ALSAPlayer.hpp"
 #include <iostream>
 #include <csignal>
+#include <memory>
 
 volatile sig_atomic_t isPlaying = true;
 
@@ -9,12 +10,12 @@ void handleSignal(int signal)
     isPlaying = false;
 }
 
-alsaPlayer::alsaPlayer() :
+ALSAPlayer::ALSAPlayer() :
     audioDevice(nullptr),
     audioFile(nullptr)
 {}
 
-alsaPlayer::~alsaPlayer()
+ALSAPlayer::~ALSAPlayer()
 {
     if (audioDevice) snd_pcm_close(audioDevice);
     audioDevice = nullptr;
@@ -23,7 +24,7 @@ alsaPlayer::~alsaPlayer()
     audioFile = nullptr;
 }
 
-bool alsaPlayer::initAudioDevice()
+bool ALSAPlayer::initAudioDevice()
 {
     snd_pcm_hw_params_t *hardwareParameters;
 
@@ -158,7 +159,7 @@ bool alsaPlayer::initAudioDevice()
     return true;
 }
 
-bool alsaPlayer::play(const std::string &filename)
+bool ALSAPlayer::play(const std::string &filename)
 {
     sf_count_t framesRead;
     snd_pcm_sframes_t writtenFrames;
@@ -254,7 +255,8 @@ int main(int argc, char **argv)
 
     const std::string filename = argv[1];
 
-    alsaPlayer player;
-    player.play(filename);
+    std::unique_ptr<AudioPlayer> player = std::make_unique<ALSAPlayer>();
+    player->play(filename);
+
     return 0;
 }
