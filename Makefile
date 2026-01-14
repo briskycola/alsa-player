@@ -3,7 +3,8 @@ CXX = g++
 CXXFLAGS = -std=c++14 -O2 -Wall -Werror
 
 # source files
-SRCS = ALSAPlayer.cpp
+SRCS = main.cpp \
+	   ALSAPlayer.cpp
 
 # object files
 OBJS = $(SRCS:.cpp=.o)
