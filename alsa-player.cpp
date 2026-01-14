@@ -104,7 +104,7 @@ bool alsaPlayer::initAudioDevice()
         return false;
     }
 
-    // Set buffer and period size depending on
+    // Set period size depending on
     // the audio device.
     periodSize = 1024;
     if (snd_pcm_hw_params_set_period_size_near(audioDevice, hardwareParameters, &periodSize, nullptr) < 0)
@@ -116,7 +116,19 @@ bool alsaPlayer::initAudioDevice()
         audioDevice = nullptr;
         return false;
     }
-    bufferSize = periodSize;
+
+    // Set buffer size depending on
+    // the audio device.
+    bufferSize = periodSize * 4; // 4 periods
+    if (snd_pcm_hw_params_set_buffer_size_near(audioDevice, hardwareParameters, &bufferSize) < 0)
+    {
+        std::cerr << "Could not set buffer size\n";
+        snd_pcm_hw_params_free(hardwareParameters);
+        snd_pcm_close(audioDevice);
+        hardwareParameters = nullptr;
+        audioDevice = nullptr;
+        return false;
+    }
 
     // Set new hardware parameters to audio device.
     if (snd_pcm_hw_params(audioDevice, hardwareParameters) < 0)
