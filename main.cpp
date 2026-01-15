@@ -1,4 +1,11 @@
-#include "ALSAPlayer.hpp"
+#if defined(__linux__)
+    #include "ALSAPlayer.hpp"
+#elif defined(__APPLE__)
+    #include "CoreAudioPlayer.hpp"
+#else
+    #error "Unsupported Platform"
+#endif
+
 #include <iostream>
 #include <csignal>
 #include <memory>
@@ -24,9 +31,16 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    std::unique_ptr<AudioPlayer> player;
+
     const std::string filename = argv[1];
 
-    std::unique_ptr<AudioPlayer> player = std::make_unique<ALSAPlayer>();
+#if defined(__linux__)
+    player = std::make_unique<ALSAPlayer>();
+#elif defined(__APPLE__)
+    player = std::make_unique<CoreAudioPlayer>();
+#endif
+
     player->play(filename);
 
     return 0;
